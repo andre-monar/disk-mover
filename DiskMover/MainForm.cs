@@ -119,5 +119,40 @@ namespace DiskMover
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void btnCreateGlobalFolder_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            {
+                dialog.Description = "Select where to create the DiskMover Links folder:";
+                dialog.RootFolder = Environment.SpecialFolder.MyComputer;
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    string selectedPath = dialog.SelectedPath;
+
+                    // Create the global links folder
+                    string globalFolderPath = System.IO.Path.Combine(selectedPath, "DiskMover Links");
+
+                    try
+                    {
+                        // Check if the global folder already exists
+                        if (!System.IO.Directory.Exists(globalFolderPath))
+                        {
+                            System.IO.Directory.CreateDirectory(globalFolderPath);
+                            MessageBox.Show($"Global links folder created at:\r\n{globalFolderPath}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Global links folder already exists at:\r\n{globalFolderPath}", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"An error occurred while creating the global links folder: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
     }
 }

@@ -8,3 +8,4 @@ C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Debug\DiskMover.csproj.Gener
 C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Debug\DiskMover.csproj.CoreCompileInputs.cache
 C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Debug\DiskMover.exe
 C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Debug\DiskMover.pdb
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Debug\DiskMover.exe.config

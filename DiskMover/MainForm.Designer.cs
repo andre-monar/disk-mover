@@ -1,4 +1,7 @@
-﻿namespace DiskMover
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace DiskMover
 {
     partial class MainForm
     {
@@ -36,6 +39,7 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.lblSouce = new System.Windows.Forms.Label();
             this.lblTarget = new System.Windows.Forms.Label();
+            this.btnCreateGlobalFolder = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtSource
@@ -48,30 +52,28 @@
             // 
             // btnBrowseSource
             // 
-            this.btnBrowseSource.Location = new System.Drawing.Point(736, 34);
+            this.btnBrowseSource.Location = new System.Drawing.Point(735, 29);
             this.btnBrowseSource.Name = "btnBrowseSource";
             this.btnBrowseSource.Size = new System.Drawing.Size(30, 24);
             this.btnBrowseSource.TabIndex = 2;
             this.btnBrowseSource.Text = "...";
             this.btnBrowseSource.UseVisualStyleBackColor = true;
-            this.btnBrowseSource.Click += new System.EventHandler(this.btnBrowseSource_Click);
             // 
             // btnBrowseTarget
             // 
-            this.btnBrowseTarget.Location = new System.Drawing.Point(736, 101);
+            this.btnBrowseTarget.Location = new System.Drawing.Point(596, 96);
             this.btnBrowseTarget.Name = "btnBrowseTarget";
             this.btnBrowseTarget.Size = new System.Drawing.Size(30, 24);
             this.btnBrowseTarget.TabIndex = 5;
             this.btnBrowseTarget.Text = "...";
             this.btnBrowseTarget.UseVisualStyleBackColor = true;
-            this.btnBrowseTarget.Click += new System.EventHandler(this.btnBrowseTarget_Click);
             // 
             // txtTarget
             // 
             this.txtTarget.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTarget.Location = new System.Drawing.Point(23, 100);
             this.txtTarget.Name = "txtTarget";
-            this.txtTarget.Size = new System.Drawing.Size(707, 24);
+            this.txtTarget.Size = new System.Drawing.Size(566, 24);
             this.txtTarget.TabIndex = 4;
             // 
             // btnCreateLink
@@ -83,7 +85,6 @@
             this.btnCreateLink.TabIndex = 6;
             this.btnCreateLink.Text = "Create Link /J";
             this.btnCreateLink.UseVisualStyleBackColor = false;
-            this.btnCreateLink.Click += new System.EventHandler(this.btnCreateLink_Click);
             // 
             // txtLog
             // 
@@ -115,11 +116,22 @@
             this.lblTarget.TabIndex = 9;
             this.lblTarget.Text = "Target Folder:";
             // 
+            // btnCreateGlobalFolder
+            // 
+            this.btnCreateGlobalFolder.Location = new System.Drawing.Point(632, 96);
+            this.btnCreateGlobalFolder.Name = "btnCreateGlobalFolder";
+            this.btnCreateGlobalFolder.Size = new System.Drawing.Size(135, 25);
+            this.btnCreateGlobalFolder.TabIndex = 10;
+            this.btnCreateGlobalFolder.Text = "Create Target Folder";
+            this.btnCreateGlobalFolder.UseVisualStyleBackColor = true;
+            this.btnCreateGlobalFolder.Click += new System.EventHandler(this.btnCreateGlobalFolder_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnCreateGlobalFolder);
             this.Controls.Add(this.lblTarget);
             this.Controls.Add(this.lblSouce);
             this.Controls.Add(this.txtLog);
@@ -144,5 +156,6 @@
         private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.Label lblSouce;
         private System.Windows.Forms.Label lblTarget;
+        private Button btnCreateGlobalFolder;
     }
 }
