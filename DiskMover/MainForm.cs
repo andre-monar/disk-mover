@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -9,14 +11,19 @@ using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
+using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 namespace DiskMover
 
 {
     public partial class MainForm : Form
     {
+        private string lastMoveSource;
+        private string lastMoveTarget;
+
+        private string lastMoveLinkSource;
+        private string lastMoveLinkTarget;
+
         public MainForm()
         {
             InitializeComponent();
@@ -54,7 +61,10 @@ namespace DiskMover
             else
             {
                 // Warning about moving system folders/backup
-                MessageBox.Show("This tool can move and create links for files and folders between disks. Please note:\n\n" +
+                MessageBox.Show("⚠️ EXPERIMENTAL TOOL - USE AT YOUR OWN RISK ⚠️\n\n" +
+                    "This tool can move and create links for files and folders between disks. Please note:\n\n" +
+                    "This is still an experimental tool and may cause data loss!\n" +
+                    "Move only files and folders that contain NON-CRITICAL data.\n"+
                     " - Do NOT move system folders (Windows, System32, ProgramFiles)\n" +
                     " - Do NOT move folders containing running programs or DLLs\n" +
                     " - Backup important data before moving", "Security Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -116,15 +126,15 @@ namespace DiskMover
 
             if (rbMoveAndLink.Checked)
             {
-                moveAndLink(sourcePath, fullTargetPath);
+                moveAndLink(sourcePath, fullTargetPath, true);
+            }
+            else if (rbMoveOnly.Checked)
+            {
+                moveOnly(sourcePath, fullTargetPath, true);
             }
             else if (rbLinkOnly.Checked)
             {
                 linkOnly(sourcePath, fullTargetPath);
-            }
-            else if (rbMoveOnly.Checked)
-            {
-                moveOnly(sourcePath, fullTargetPath);
             }
         }
         
@@ -173,7 +183,7 @@ namespace DiskMover
             }
         }
 
-        private void moveOnly(string source, string target)
+        private void moveOnly(string source, string target, bool moveButton = false)
         {
             try
             {
@@ -214,6 +224,14 @@ namespace DiskMover
                     MessageBox.Show("Source file or folder does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+
+                // If used by the Move button, save for potential undo
+                if (moveButton)
+                {
+                    lastMoveSource = source;
+                    lastMoveTarget = target;
+                    btnUndoMove.Visible = true;
+                }
                 MessageBox.Show("Moved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
@@ -222,7 +240,7 @@ namespace DiskMover
             }
         }
 
-        private void moveAndLink(string source, string target)
+        private void moveAndLink(string source, string target, bool moveLinkButton = false)
         {
             try
             {
@@ -233,7 +251,19 @@ namespace DiskMover
 
                 // First move the source to the target location
                 moveOnly(source, target);
-                linkOnly(target, source); // Link from new location back to original source path
+
+                // If used by the Move and Link button, save for potential undo.
+                // Save before creating the link, because if link creation fails, we want to be able to undo the move without worrying about the link.
+                if (moveLinkButton)
+                {
+                    lastMoveLinkSource = source;
+                    lastMoveLinkTarget = target;
+                    btnUndoMoveLink.Visible = true;
+                }
+                linkOnly(target, source);  // Link from new location back to original source path
+
+                
+                
             }
             catch (Exception ex)
             {
@@ -302,6 +332,167 @@ namespace DiskMover
             }
         }
 
-        
+        private void btnDeleteLinks_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Determines start folder
+                string initialFolder = null;
+                // if txtTarget.Text valid, use 
+                if (!string.IsNullOrWhiteSpace(txtTarget.Text) && Directory.Exists(txtTarget.Text))
+                {
+                    initialFolder = txtTarget.Text;
+                }
+                string selectedPath = FolderFileDialog.ShowDialog(this, "Select folder containing links to delete:", initialFolder);
+
+                if (string.IsNullOrEmpty(selectedPath))
+                {
+                    return;
+                }
+
+                // Verify if it's a link
+                bool isLink = false;
+                try
+                {
+                    FileAttributes attributes = File.GetAttributes(selectedPath);
+                    isLink = (attributes & System.IO.FileAttributes.ReparsePoint) == System.IO.FileAttributes.ReparsePoint;
+                }
+                catch
+                {
+                    isLink = false;
+                }
+
+                if (!isLink)
+                {
+                    var confirm = MessageBox.Show("This doesn't appear to be symbolic link or junction.\n\nDelete anyway?",
+                        "Warning",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning);
+
+                    if (confirm != DialogResult.Yes)
+                        return;
+                }
+
+                var result = MessageBox.Show($"Are you sure you want to delete this link?\n\n{selectedPath}",
+                    "Confirm Delete",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    if (Directory.Exists(selectedPath))
+                    {
+                        Directory.Delete(selectedPath);
+                        MessageBox.Show("Link folder deleted successfully!", "Success",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        if (File.Exists(selectedPath))
+                        {
+                            File.Delete(selectedPath);
+                            MessageBox.Show("Link file deleted successfully!", "Success",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error deleting link: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnUndoMove_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Redundant checks
+                if (string.IsNullOrEmpty(lastMoveSource) || string.IsNullOrEmpty(lastMoveTarget))
+                {
+                    MessageBox.Show("No move operation to undo.", "Info",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+
+                // Undo
+                var result = MessageBox.Show($"Undo last move operation?\n\nLast move: \n{lastMoveSource} -> {lastMoveTarget}",
+                    "Confirm Undo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    moveOnly(lastMoveTarget, lastMoveSource);
+                    MessageBox.Show("Undo completed!", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    lastMoveSource = null;
+                    lastMoveTarget = null;
+                    btnUndoMove.Visible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during undo: {ex.Message}", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnUndoMoveLink_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Redundant checks
+                if (string.IsNullOrEmpty(lastMoveLinkSource) || string.IsNullOrEmpty(lastMoveLinkTarget))
+                {
+                    MessageBox.Show("No move operation to undo.", "Info",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Undo
+                var result = MessageBox.Show($"Undo last move and link operation?\n\nLast move and link: \n{lastMoveLinkSource} -> {lastMoveLinkTarget}",
+                        "Confirm Undo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    // Check if the original source path is still a link (which it should be if the link creation succeeded). If it's not a link, it means the link creation failed and we should not proceed with the undo to avoid potential data loss.
+                    if (Directory.Exists(lastMoveLinkSource) || File.Exists(lastMoveLinkSource))
+                    {
+                        FileAttributes attributes = File.GetAttributes(lastMoveLinkSource);
+                        bool isLink = (attributes & System.IO.FileAttributes.ReparsePoint) == System.IO.FileAttributes.ReparsePoint;
+                        if (isLink)
+                        {
+                            // If it's a link, we can just delete it to remove the link from the original source path.
+                            if (Directory.Exists(lastMoveLinkSource))
+                            {
+                                Directory.Delete(lastMoveLinkSource);
+                            }
+                            else if (File.Exists(lastMoveLinkSource))
+                            {
+                                File.Delete(lastMoveLinkSource);
+                            }
+                        }
+                        else
+                        {
+                            // If not a link, we should not proceed with the undo because it means the link creation failed and we want to keep the original file/folder for safety.
+                            MessageBox.Show("The original source path is not a link. Undo cannot proceed to avoid potential data loss.", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    moveOnly(lastMoveLinkTarget, lastMoveLinkSource);
+                    // No need for explicit link deletion because moving back will remove the link from the target location.
+                    // If the link still exists, it means the move back failed and we want to keep the link for safety.
+                    MessageBox.Show("Undo completed!", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    lastMoveLinkSource = null;
+                    lastMoveLinkTarget = null;
+                    btnUndoMoveLink.Visible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during undo: {ex.Message}", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -53,15 +54,24 @@ namespace DiskMover
         /// </summary>
         /// <param name="owner">The parent window handle</param>
         /// <param name="title">The dialog title</param>
+        /// <param name="initialDirectory"> Optional initial directory (can be null)</param>
         /// <returns>Full path if selected, empty string if invalid</returns>
-        public static string ShowDialog(IWin32Window owner, string title = "Select a file or folder")
+        public static string ShowDialog(IWin32Window owner, string title = "Select a file or folder", string initialDirectory = null)
         {
             var info = new BROWSEINFO();
             info.hwndOwner = owner?.Handle ?? IntPtr.Zero; 
             info.lpszTitle = title;                         
             info.pszDisplayName = new string('\0', 256);
 
-            info.pidlRoot = GetPidlFromSpecialFolder(Environment.SpecialFolder.MyComputer);
+            if (!string.IsNullOrEmpty(initialDirectory) && Directory.Exists(initialDirectory))
+            {
+                info.pidlRoot = GetPidlFromPath(initialDirectory);
+            } 
+            else
+            {
+                info.pidlRoot = GetPidlFromSpecialFolder(Environment.SpecialFolder.MyComputer);
+            }
+                
             // Flag config:
             // BIF_NEWDIALOGSTYLE: Use a modern dialog style.
             // BIF_EDITBOX: Show an edit box for manual path entry.
@@ -110,7 +120,42 @@ namespace DiskMover
             return pidl;
         }
 
+        
         [DllImport("shell32.dll")]
         private static extern int SHGetFolderLocation(IntPtr hwndOwner, int nFolder, IntPtr hToken, int dwReserved, out IntPtr ppidl);
+
+        [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+        private static extern int SHParseDisplayName(
+        [MarshalAs(UnmanagedType.LPWStr)] string pszName,
+        IntPtr pbc,
+        out IntPtr ppidl,
+        uint sfgaoIn,
+        out uint psfgaoOut);
+
+        /// <summary>
+        /// Converts a file system path to a PIDL 
+        /// </summary>
+        private static IntPtr GetPidlFromPath(string path)
+        {
+            if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
+                return IntPtr.Zero;
+
+            try
+            {
+                IntPtr pidl;
+                uint sfgao;
+
+                int result = SHParseDisplayName(path, IntPtr.Zero, out pidl, 0, out sfgao);
+
+                if (result == 0)
+                    return pidl;
+                else
+                    return IntPtr.Zero;
+            }
+            catch
+            {
+                return IntPtr.Zero;
+            }
+        }
     }
 }
