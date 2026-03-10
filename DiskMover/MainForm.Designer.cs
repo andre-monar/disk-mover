@@ -31,6 +31,7 @@ namespace DiskMover
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.txtSource = new System.Windows.Forms.TextBox();
             this.btnBrowseSource = new System.Windows.Forms.Button();
             this.btnBrowseTarget = new System.Windows.Forms.Button();
@@ -46,6 +47,7 @@ namespace DiskMover
             this.btnDeleteLinks = new System.Windows.Forms.Button();
             this.btnUndoMove = new System.Windows.Forms.Button();
             this.btnUndoMoveLink = new System.Windows.Forms.Button();
+            this.btnSwap = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtSource
@@ -199,11 +201,22 @@ namespace DiskMover
             this.btnUndoMoveLink.Visible = false;
             this.btnUndoMoveLink.Click += new System.EventHandler(this.btnUndoMoveLink_Click);
             // 
+            // btnSwap
+            // 
+            this.btnSwap.Location = new System.Drawing.Point(353, 65);
+            this.btnSwap.Name = "btnSwap";
+            this.btnSwap.Size = new System.Drawing.Size(56, 25);
+            this.btnSwap.TabIndex = 18;
+            this.btnSwap.Text = "Swap";
+            this.btnSwap.UseVisualStyleBackColor = true;
+            this.btnSwap.Click += new System.EventHandler(this.btnSwap_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 322);
+            this.Controls.Add(this.btnSwap);
             this.Controls.Add(this.btnUndoMoveLink);
             this.Controls.Add(this.btnUndoMove);
             this.Controls.Add(this.btnDeleteLinks);
@@ -219,6 +232,7 @@ namespace DiskMover
             this.Controls.Add(this.txtTarget);
             this.Controls.Add(this.btnBrowseSource);
             this.Controls.Add(this.txtSource);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "Disk Mover";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -248,5 +262,6 @@ namespace DiskMover
         private Button btnDeleteLinks;
         private Button btnUndoMove;
         private Button btnUndoMoveLink;
+        private Button btnSwap;
     }
 }

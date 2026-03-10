@@ -13,4 +13,3 @@ C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.csproj.Fod
 C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.csproj.Up2Date
 C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.exe
 C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.pdb
-C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.exe.config

@@ -62,18 +62,50 @@ namespace DiskMover
             {
                 // Warning about moving system folders/backup
                 MessageBox.Show("⚠️ EXPERIMENTAL TOOL - USE AT YOUR OWN RISK ⚠️\n\n" +
-                    "This tool can move and create links for files and folders between disks. Please note:\n\n" +
-                    "This is still an experimental tool and may cause data loss!\n" +
-                    "Move only files and folders that contain NON-CRITICAL data.\n"+
-                    " - Do NOT move system folders (Windows, System32, ProgramFiles)\n" +
-                    " - Do NOT move folders containing running programs or DLLs\n" +
-                    " - Backup important data before moving", "Security Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                "⚠️ This is still an experimental tool and may cause data loss!\n" +
+                                "⚠️ Move only files and folders that contain NON-CRITICAL data.\n\n" +
+                                "This tool can move and create links for files and folders between disks. Please note:\n\n" +
+                                "✅ Generally safe to move (free disk space!):\n" +
+                                "   • AppData (game saves, app configs)\n" +
+                                "   • Steam/Epic/GOG game libraries\n" +
+                                "   • Downloads folder\n" +
+                                "   • Documents, Pictures, Videos, Music\n" +
+                                "   • Large project folders (coding, design)\n" +
+                                "   • Virtual machine disks\n\n" +
+                                "❌ DO NOT MOVE:\n" +
+                                "   • Windows, System32, Program Files\n" +
+                                "   • Folders with running programs/DLLs\n" +
+                                "   • System protected folders\n\n" +
+                                "📌 IMPORTANT: Always backup important data before moving!",
+                                "Security Warning",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
             }
         }
 
+        // Determines initial folder for browse dialogs based on current text input,
+        // checking if it's a valid file or folder path and returning the appropriate initial folder for the dialog.
+        private string GetInitialFolder(string currentPath)
+        {
+            if (!string.IsNullOrWhiteSpace(currentPath))
+            {
+                currentPath = currentPath.TrimEnd('\\');
+                if (Directory.Exists(currentPath))
+                {
+                    return currentPath;
+                }
+                else if (File.Exists(currentPath))
+                {
+                    return Path.GetDirectoryName(currentPath);
+                }
+            }
+            return null;
+        }
         private void btnBrowseSource_Click(object sender, EventArgs e)
         {
-            string selectedPath = FolderFileDialog.ShowDialog(this, "Select source folder or file:");
+            string initialFolder = GetInitialFolder(txtSource.Text);
+
+            string selectedPath = FolderFileDialog.ShowDialog(this, "Select source folder or file:", initialFolder);
             if (!string.IsNullOrEmpty(selectedPath))
             {
                 txtSource.Text = selectedPath;
@@ -86,6 +118,14 @@ namespace DiskMover
             {
                 dialog.Description = "Select target folder:";
                 dialog.RootFolder = Environment.SpecialFolder.MyComputer;
+
+                // Set initial folder based on current text input
+                string initialFolder = GetInitialFolder(txtTarget.Text);
+                if (!string.IsNullOrEmpty(initialFolder) && Directory.Exists(initialFolder))
+                {
+                    dialog.SelectedPath = initialFolder;
+                }
+
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -194,7 +234,7 @@ namespace DiskMover
                     if (Path.GetPathRoot(source) != Path.GetPathRoot(target))
                     {
                         // If different drives, we need to copy and delete instead of move
-                        Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(source, target, true); // Custom method to copy directories
+                        Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(source, target, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs); // Custom method to copy directories
                         Directory.Delete(source, true); // Delete original after copying
                     }
                     else
@@ -337,12 +377,7 @@ namespace DiskMover
             try
             {
                 // Determines start folder
-                string initialFolder = null;
-                // if txtTarget.Text valid, use 
-                if (!string.IsNullOrWhiteSpace(txtTarget.Text) && Directory.Exists(txtTarget.Text))
-                {
-                    initialFolder = txtTarget.Text;
-                }
+                string initialFolder = GetInitialFolder(txtTarget.Text);
                 string selectedPath = FolderFileDialog.ShowDialog(this, "Select folder containing links to delete:", initialFolder);
 
                 if (string.IsNullOrEmpty(selectedPath))
@@ -493,6 +528,13 @@ namespace DiskMover
                 MessageBox.Show($"Error during undo: {ex.Message}", "Error",
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnSwap_Click(object sender, EventArgs e)
+        {
+            string temp = txtSource.Text;
+            txtSource.Text = txtTarget.Text;
+            txtTarget.Text = temp;
         }
     }
 }

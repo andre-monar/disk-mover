@@ -49,6 +49,32 @@ namespace DiskMover
         [DllImport("ole32.dll")]
         private static extern void CoTaskMemFree(IntPtr pv);
 
+        // Delegate for the callback function used by SHBrowseForFolder to set the initial directory when the dialog is initialized.
+        private delegate int BrowseCallbackProc(IntPtr hwnd, uint msg, IntPtr lParam, IntPtr lpData);
+
+        // Constants for the callback messages and parameters
+        private const int BFFM_INITIALIZED = 1;
+        private const int BFFM_SETSELECTION = 0x400 + 103; // WM_USER + 103
+
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, string lParam);
+
+        // Callback function to set the initial directory when the dialog is initialized. It checks if the message is BFFM_INITIALIZED and then sets the selection to the initial directory provided in lpData.
+        private static int BrowseCallback(IntPtr hwnd, uint uMsg, IntPtr lParam, IntPtr lpData)
+        {
+            
+            if (uMsg == BFFM_INITIALIZED)
+            {
+                // Set the initial directory when the dialog is initialized
+                string initialDir = Marshal.PtrToStringAuto(lpData);
+                if (!string.IsNullOrEmpty(initialDir))
+                {
+                    SendMessage(hwnd, BFFM_SETSELECTION, 1, initialDir);
+                }
+            }
+            return 0;
+        }
         /// <summary>
         /// Show the dialog to select a file or folder. It uses the SHBrowseForFolder API with specific flags to allow both files and folders to be selected.
         /// </summary>
@@ -58,31 +84,37 @@ namespace DiskMover
         /// <returns>Full path if selected, empty string if invalid</returns>
         public static string ShowDialog(IWin32Window owner, string title = "Select a file or folder", string initialDirectory = null)
         {
+
             var info = new BROWSEINFO();
             info.hwndOwner = owner?.Handle ?? IntPtr.Zero; 
             info.lpszTitle = title;                         
             info.pszDisplayName = new string('\0', 256);
 
-            if (!string.IsNullOrEmpty(initialDirectory) && Directory.Exists(initialDirectory))
-            {
-                info.pidlRoot = GetPidlFromPath(initialDirectory);
-            } 
-            else
-            {
-                info.pidlRoot = GetPidlFromSpecialFolder(Environment.SpecialFolder.MyComputer);
-            }
-                
+            info.pidlRoot = GetPidlFromSpecialFolder(Environment.SpecialFolder.MyComputer);
+
             // Flag config:
             // BIF_NEWDIALOGSTYLE: Use a modern dialog style.
             // BIF_EDITBOX: Show an edit box for manual path entry.
             // BIF_BROWSEINCLUDEFILES: Allow selection of files in addition to folders.
             // BIF_RETURNONLYFSDIRS: Restrict selection to filesystem items (folders and files), excluding virtual items like "This PC".
             info.ulFlags = (int)(BrowseFlags.BIF_NEWDIALOGSTYLE |
-                                 BrowseFlags.BIF_EDITBOX |
-                                 BrowseFlags.BIF_BROWSEINCLUDEFILES |
-                                 BrowseFlags.BIF_RETURNONLYFSDIRS);
+                     BrowseFlags.BIF_EDITBOX |
+                     BrowseFlags.BIF_BROWSEINCLUDEFILES |
+                     BrowseFlags.BIF_RETURNONLYFSDIRS |
+                     BrowseFlags.BIF_BROWSEFORCOMPUTER);
 
+            if (!string.IsNullOrEmpty(initialDirectory) && Directory.Exists(initialDirectory))
+            {
+                info.lpfnCallBack = Marshal.GetFunctionPointerForDelegate(
+                    new BrowseCallbackProc(BrowseCallback));
+
+                info.lParam = Marshal.StringToHGlobalAuto(initialDirectory);
+            }
             IntPtr pidl = SHBrowseForFolder(ref info);
+
+            // Free the memory allocated for the initial directory string if it was set, to prevent memory leaks.
+            if (info.lParam != IntPtr.Zero)
+                Marshal.FreeHGlobal(info.lParam);
 
             // If user selected something, pidl will be a valid pointer. If user canceled, it will be IntPtr.Zero.
             if (pidl != IntPtr.Zero)
