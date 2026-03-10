@@ -40,6 +40,9 @@ namespace DiskMover
             this.lblSouce = new System.Windows.Forms.Label();
             this.lblTarget = new System.Windows.Forms.Label();
             this.btnCreateGlobalFolder = new System.Windows.Forms.Button();
+            this.rbLinkOnly = new System.Windows.Forms.RadioButton();
+            this.rbMoveOnly = new System.Windows.Forms.RadioButton();
+            this.rbMoveAndLink = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // txtSource
@@ -58,6 +61,7 @@ namespace DiskMover
             this.btnBrowseSource.TabIndex = 2;
             this.btnBrowseSource.Text = "...";
             this.btnBrowseSource.UseVisualStyleBackColor = true;
+            this.btnBrowseSource.Click += new System.EventHandler(this.btnBrowseSource_Click);
             // 
             // btnBrowseTarget
             // 
@@ -67,6 +71,7 @@ namespace DiskMover
             this.btnBrowseTarget.TabIndex = 5;
             this.btnBrowseTarget.Text = "...";
             this.btnBrowseTarget.UseVisualStyleBackColor = true;
+            this.btnBrowseTarget.Click += new System.EventHandler(this.btnBrowseTarget_Click);
             // 
             // txtTarget
             // 
@@ -79,7 +84,7 @@ namespace DiskMover
             // btnCreateLink
             // 
             this.btnCreateLink.BackColor = System.Drawing.SystemColors.Control;
-            this.btnCreateLink.Location = new System.Drawing.Point(23, 156);
+            this.btnCreateLink.Location = new System.Drawing.Point(22, 228);
             this.btnCreateLink.Name = "btnCreateLink";
             this.btnCreateLink.Size = new System.Drawing.Size(743, 40);
             this.btnCreateLink.TabIndex = 6;
@@ -89,7 +94,7 @@ namespace DiskMover
             // txtLog
             // 
             this.txtLog.BackColor = System.Drawing.SystemColors.Window;
-            this.txtLog.Location = new System.Drawing.Point(23, 231);
+            this.txtLog.Location = new System.Drawing.Point(22, 287);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
@@ -126,11 +131,47 @@ namespace DiskMover
             this.btnCreateGlobalFolder.UseVisualStyleBackColor = true;
             this.btnCreateGlobalFolder.Click += new System.EventHandler(this.btnCreateGlobalFolder_Click);
             // 
+            // rbLinkOnly
+            // 
+            this.rbLinkOnly.AutoSize = true;
+            this.rbLinkOnly.Location = new System.Drawing.Point(22, 161);
+            this.rbLinkOnly.Name = "rbLinkOnly";
+            this.rbLinkOnly.Size = new System.Drawing.Size(67, 17);
+            this.rbLinkOnly.TabIndex = 11;
+            this.rbLinkOnly.TabStop = true;
+            this.rbLinkOnly.Text = "Link only";
+            this.rbLinkOnly.UseVisualStyleBackColor = true;
+            // 
+            // rbMoveOnly
+            // 
+            this.rbMoveOnly.AutoSize = true;
+            this.rbMoveOnly.Location = new System.Drawing.Point(23, 184);
+            this.rbMoveOnly.Name = "rbMoveOnly";
+            this.rbMoveOnly.Size = new System.Drawing.Size(74, 17);
+            this.rbMoveOnly.TabIndex = 12;
+            this.rbMoveOnly.TabStop = true;
+            this.rbMoveOnly.Text = "Move only";
+            this.rbMoveOnly.UseVisualStyleBackColor = true;
+            // 
+            // rbMoveAndLink
+            // 
+            this.rbMoveAndLink.AutoSize = true;
+            this.rbMoveAndLink.Location = new System.Drawing.Point(22, 138);
+            this.rbMoveAndLink.Name = "rbMoveAndLink";
+            this.rbMoveAndLink.Size = new System.Drawing.Size(96, 17);
+            this.rbMoveAndLink.TabIndex = 13;
+            this.rbMoveAndLink.TabStop = true;
+            this.rbMoveAndLink.Text = "Move and Link";
+            this.rbMoveAndLink.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.rbMoveAndLink);
+            this.Controls.Add(this.rbMoveOnly);
+            this.Controls.Add(this.rbLinkOnly);
             this.Controls.Add(this.btnCreateGlobalFolder);
             this.Controls.Add(this.lblTarget);
             this.Controls.Add(this.lblSouce);
@@ -157,5 +198,8 @@ namespace DiskMover
         private System.Windows.Forms.Label lblSouce;
         private System.Windows.Forms.Label lblTarget;
         private Button btnCreateGlobalFolder;
+        private RadioButton rbLinkOnly;
+        private RadioButton rbMoveOnly;
+        private RadioButton rbMoveAndLink;
     }
 }

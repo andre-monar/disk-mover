@@ -21,15 +21,10 @@ namespace DiskMover
 
         private void btnBrowseSource_Click(object sender, EventArgs e)
         {
-            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            string selectedPath = FolderFileDialog.ShowDialog(this, "Select source folder or file:");
+            if (!string.IsNullOrEmpty(selectedPath))
             {
-                dialog.Description = "Select source folder:";
-                dialog.RootFolder = Environment.SpecialFolder.MyComputer;
-
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    txtSource.Text = dialog.SelectedPath;
-                }
+                txtSource.Text = selectedPath;
             }
         }
 
@@ -56,19 +51,19 @@ namespace DiskMover
                 return;
             }
 
-            // Validate source folder exists
-            if (!System.IO.Directory.Exists(txtSource.Text))
+            // Validate source folder/file exists
+            if (!System.IO.Directory.Exists(txtSource.Text) && !System.IO.File.Exists(txtSource.Text))
             {
-                MessageBox.Show("Source folder does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Source file or folder does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             // Extract the last folder name from source path
             string sourcePath = txtSource.Text.TrimEnd('\\'); // Remove "\" if any
-            string folderName = System.IO.Path.GetFileName(sourcePath); // Gets folder name (from path)
+            string folderOrFileName = System.IO.Path.GetFileName(sourcePath); // Gets folder/file name (from path)
 
             string targetBase = txtTarget.Text.TrimEnd('\\'); // Remove "\" if any
-            string fullTargetPath = System.IO.Path.Combine(targetBase, folderName); // Combine target base with folder name
+            string fullTargetPath = System.IO.Path.Combine(targetBase, folderOrFileName); // Combine target base with folder/file name
 
             // Check if target path already exists
             if (System.IO.Directory.Exists(fullTargetPath) || System.IO.File.Exists(fullTargetPath))
