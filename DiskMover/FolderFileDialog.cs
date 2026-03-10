@@ -61,6 +61,7 @@ namespace DiskMover
             info.lpszTitle = title;                         
             info.pszDisplayName = new string('\0', 256);
 
+            info.pidlRoot = GetPidlFromSpecialFolder(Environment.SpecialFolder.MyComputer);
             // Flag config:
             // BIF_NEWDIALOGSTYLE: Use a modern dialog style.
             // BIF_EDITBOX: Show an edit box for manual path entry.
@@ -100,5 +101,16 @@ namespace DiskMover
             // Cancelled or invalid selection, return empty string.
             return string.Empty;
         }
+
+        // Helper method to get the PIDL for a special folder like "My Computer". This allows the dialog to start at that location.
+        private static IntPtr GetPidlFromSpecialFolder(Environment.SpecialFolder folder)
+        {
+            IntPtr pidl = IntPtr.Zero;
+            int bytes = (int)SHGetFolderLocation(IntPtr.Zero, (int)folder, IntPtr.Zero, 0, out pidl);
+            return pidl;
+        }
+
+        [DllImport("shell32.dll")]
+        private static extern int SHGetFolderLocation(IntPtr hwndOwner, int nFolder, IntPtr hToken, int dwReserved, out IntPtr ppidl);
     }
 }
