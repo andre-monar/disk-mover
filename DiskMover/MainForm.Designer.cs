@@ -90,6 +90,7 @@ namespace DiskMover
             this.btnCreateLink.TabIndex = 6;
             this.btnCreateLink.Text = "Create Link /J";
             this.btnCreateLink.UseVisualStyleBackColor = false;
+            this.btnCreateLink.Click += new System.EventHandler(this.btnCreateLink_Click);
             // 
             // txtLog
             // 
@@ -138,7 +139,6 @@ namespace DiskMover
             this.rbLinkOnly.Name = "rbLinkOnly";
             this.rbLinkOnly.Size = new System.Drawing.Size(67, 17);
             this.rbLinkOnly.TabIndex = 11;
-            this.rbLinkOnly.TabStop = true;
             this.rbLinkOnly.Text = "Link only";
             this.rbLinkOnly.UseVisualStyleBackColor = true;
             // 
@@ -149,13 +149,13 @@ namespace DiskMover
             this.rbMoveOnly.Name = "rbMoveOnly";
             this.rbMoveOnly.Size = new System.Drawing.Size(74, 17);
             this.rbMoveOnly.TabIndex = 12;
-            this.rbMoveOnly.TabStop = true;
             this.rbMoveOnly.Text = "Move only";
             this.rbMoveOnly.UseVisualStyleBackColor = true;
             // 
             // rbMoveAndLink
             // 
             this.rbMoveAndLink.AutoSize = true;
+            this.rbMoveAndLink.Checked = true;
             this.rbMoveAndLink.Location = new System.Drawing.Point(22, 138);
             this.rbMoveAndLink.Name = "rbMoveAndLink";
             this.rbMoveAndLink.Size = new System.Drawing.Size(96, 17);
@@ -186,6 +186,11 @@ namespace DiskMover
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void BtnCreateLink_Click(object sender, System.EventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion

@@ -72,41 +72,62 @@ namespace DiskMover
                 return;
             }
 
+            if (rbMoveAndLink.Checked)
+            {
+                // todo move link
+            }
+            else if (rbLinkOnly.Checked)
+            {
+                linkOnly(sourcePath, fullTargetPath);
+            }
+            else if (rbMoveOnly.Checked)
+            {
+                // todo moveOnly(sourcePath, fullTargetPath);
+            }
+        }
+        
+        private void linkOnly(string source, string target)
+        {
             // Create symbolic link (mklink)
             try
             {
                 System.Diagnostics.Process process = new System.Diagnostics.Process();
                 process.StartInfo.FileName = "cmd.exe";
-                process.StartInfo.Arguments = $"/c mklink /J \"{fullTargetPath}\" \"{txtSource.Text}\"";
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = true;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8;
-                process.StartInfo.StandardErrorEncoding = System.Text.Encoding.UTF8;
-
-
-                process.Start();
-
-                string output = process.StandardOutput.ReadToEnd();
-                string error = process.StandardError.ReadToEnd();
-                process.WaitForExit();
-
-                // Update log
-                txtLog.Clear();
-                txtLog.AppendText($"Command: mklink /J \"{fullTargetPath}\" \"{txtSource.Text}\"\r\n");
-
-                if (process.ExitCode == 0)
+                // Treat file/folder separately
+                string arguments;
+                if (System.IO.Directory.Exists(source))
                 {
-                    txtLog.AppendText("✅ Link created successfully:\r\n");
-                    txtLog.AppendText(output);
-                    SystemSounds.Asterisk.Play();
+                    arguments = $"/c mklink /J \"{target}\" \"{source}\""; // folder
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.CreateNoWindow = true;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.RedirectStandardError = true;
+                    process.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8;
+                    process.StartInfo.StandardErrorEncoding = System.Text.Encoding.UTF8;
+                    string output = process.StandardOutput.ReadToEnd();
+                    string error = process.StandardError.ReadToEnd();
                 }
                 else
                 {
-                    txtLog.AppendText($"❌ Error creating link:\r\n");
-                    txtLog.AppendText(error);
-                    SystemSounds.Hand.Play();
+                    process.StartInfo.UseShellExecute = true; // For file links, we need to run as admin
+                    process.StartInfo.Verb = "runas"; // Run as admin for file links
+                    process.StartInfo.CreateNoWindow = false;
+                    arguments = $"/c mklink \"{target}\" \"{source}\""; // file
+                }
+
+                process.StartInfo.Arguments = arguments;
+                process.Start();
+                process.WaitForExit();
+
+
+                if (process.ExitCode == 0)
+                {
+                    MessageBox.Show("Link created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    string errorMessage = process.StandardError.ReadToEnd();
+                    MessageBox.Show($"Failed to create link. Error: {errorMessage}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
