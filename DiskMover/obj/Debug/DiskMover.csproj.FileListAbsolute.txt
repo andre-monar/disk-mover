@@ -9,9 +9,8 @@ C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Debug\DiskMover.csproj.CoreC
 C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Debug\DiskMover.exe
 C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Debug\DiskMover.pdb
 C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Debug\DiskMover.exe.config
-C:\Users\monar\source\repos\DiskMover\DiskMover\bin\Debug\FolderBrowserEx.dll
-C:\Users\monar\source\repos\DiskMover\DiskMover\bin\Debug\Microsoft.WindowsAPICodePack.dll
-C:\Users\monar\source\repos\DiskMover\DiskMover\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
 C:\Users\monar\source\repos\DiskMover\DiskMover\bin\Debug\Microsoft.WindowsAPICodePack.xml
 C:\Users\monar\source\repos\DiskMover\DiskMover\bin\Debug\Microsoft.WindowsAPICodePack.Shell.xml
 C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Debug\DiskMover.csproj.Up2Date
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Debug\DiskMover.csproj.Fody.CopyLocal.cache
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Debug\DiskMover.csproj.Fody.RuntimeCopyLocal.cache

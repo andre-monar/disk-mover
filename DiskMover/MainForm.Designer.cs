@@ -220,7 +220,7 @@ namespace DiskMover
             this.Controls.Add(this.btnBrowseSource);
             this.Controls.Add(this.txtSource);
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "Disk Mover";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

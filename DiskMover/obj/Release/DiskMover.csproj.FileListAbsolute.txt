@@ -1,0 +1,16 @@
+C:\Users\monar\source\repos\DiskMover\DiskMover\bin\Release\DiskMover.exe.config
+C:\Users\monar\source\repos\DiskMover\DiskMover\bin\Release\DiskMover.exe
+C:\Users\monar\source\repos\DiskMover\DiskMover\bin\Release\DiskMover.pdb
+C:\Users\monar\source\repos\DiskMover\DiskMover\bin\Release\Microsoft.WindowsAPICodePack.xml
+C:\Users\monar\source\repos\DiskMover\DiskMover\bin\Release\Microsoft.WindowsAPICodePack.Shell.xml
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.csproj.AssemblyReference.cache
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.MainForm.resources
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.Properties.Resources.resources
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.csproj.GenerateResource.cache
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.csproj.CoreCompileInputs.cache
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.csproj.Fody.CopyLocal.cache
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.csproj.Fody.RuntimeCopyLocal.cache
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.csproj.Up2Date
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.exe
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.pdb
+C:\Users\monar\source\repos\DiskMover\DiskMover\obj\Release\DiskMover.exe.config

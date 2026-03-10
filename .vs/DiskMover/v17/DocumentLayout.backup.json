@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\monar\\source\\repos\\DiskMover\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5F446FA9-00C4-407E-9C51-A6193075D3ED}|DiskMover\\DiskMover.csproj|C:\\Users\\monar\\source\\repos\\DiskMover\\diskmover\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5F446FA9-00C4-407E-9C51-A6193075D3ED}|DiskMover\\DiskMover.csproj|C:\\Users\\monar\\source\\repos\\DiskMover\\diskmover\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F446FA9-00C4-407E-9C51-A6193075D3ED}|DiskMover\\DiskMover.csproj|solutionrelative:diskmover\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F446FA9-00C4-407E-9C51-A6193075D3ED}|DiskMover\\DiskMover.csproj|c:\\users\\monar\\source\\repos\\diskmover\\diskmover\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5F446FA9-00C4-407E-9C51-A6193075D3ED}|DiskMover\\DiskMover.csproj|solutionrelative:diskmover\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5F446FA9-00C4-407E-9C51-A6193075D3ED}|DiskMover\\DiskMover.csproj|c:\\users\\monar\\source\\repos\\diskmover\\diskmover\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{5F446FA9-00C4-407E-9C51-A6193075D3ED}|DiskMover\\DiskMover.csproj|C:\\Users\\monar\\source\\repos\\DiskMover\\diskmover\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{5F446FA9-00C4-407E-9C51-A6193075D3ED}|DiskMover\\DiskMover.csproj|solutionrelative:diskmover\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5F446FA9-00C4-407E-9C51-A6193075D3ED}|DiskMover\\DiskMover.csproj|C:\\Users\\monar\\source\\repos\\DiskMover\\diskmover\\mainform.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}",
       "RelativeMoniker": "D:0:0:{5F446FA9-00C4-407E-9C51-A6193075D3ED}|DiskMover\\DiskMover.csproj|solutionrelative:diskmover\\mainform.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5F446FA9-00C4-407E-9C51-A6193075D3ED}|DiskMover\\DiskMover.csproj|C:\\Users\\monar\\source\\repos\\DiskMover\\diskmover\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5F446FA9-00C4-407E-9C51-A6193075D3ED}|DiskMover\\DiskMover.csproj|solutionrelative:diskmover\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5F446FA9-00C4-407E-9C51-A6193075D3ED}|DiskMover\\DiskMover.csproj|C:\\Users\\monar\\source\\repos\\DiskMover\\diskmover\\folderfiledialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -30,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
@@ -42,12 +42,11 @@
               "RelativeToolTip": "DiskMover\\FolderFileDialog.cs",
               "ViewState": "AgIAACoAAAAAAAAAAAAIwEEAAABHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-10T11:48:29.825Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-10T11:48:29.825Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "MainForm.resx",
               "DocumentMoniker": "C:\\Users\\monar\\source\\repos\\DiskMover\\DiskMover\\MainForm.resx",
               "RelativeDocumentMoniker": "DiskMover\\MainForm.resx",
@@ -59,20 +58,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "MainForm.Designer.cs",
               "DocumentMoniker": "C:\\Users\\monar\\source\\repos\\DiskMover\\DiskMover\\MainForm.Designer.cs",
               "RelativeDocumentMoniker": "DiskMover\\MainForm.Designer.cs",
               "ToolTip": "C:\\Users\\monar\\source\\repos\\DiskMover\\DiskMover\\MainForm.Designer.cs",
               "RelativeToolTip": "DiskMover\\MainForm.Designer.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAMQAAAAAAAAAAAAiwNoAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-04T21:28:35.796Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "MainForm.cs",
               "DocumentMoniker": "C:\\Users\\monar\\source\\repos\\DiskMover\\DiskMover\\MainForm.cs",
               "RelativeDocumentMoniker": "DiskMover\\MainForm.cs",
@@ -85,7 +84,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "MainForm.cs [Design]",
               "DocumentMoniker": "C:\\Users\\monar\\source\\repos\\DiskMover\\DiskMover\\MainForm.cs",
               "RelativeDocumentMoniker": "DiskMover\\MainForm.cs",
